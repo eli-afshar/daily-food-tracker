@@ -1,5 +1,5 @@
 import "./App.css";
-import Login from "./containers/loginPage/Login";
+import { LoginForm } from "./containers/loginPage/LoginForm";
 
 function App() {
   const isLoggedIn = false;
@@ -11,7 +11,7 @@ function App() {
     </div>
   ) : (
     <>
-      <Login />
+      <LoginForm />
     </>
   );
 }
