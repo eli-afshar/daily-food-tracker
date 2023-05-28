@@ -13,7 +13,11 @@ export interface Inputs {
   password: string;
 }
 
-export const LoginForm = () => {
+interface Props {
+  setIsLoggedIn: (arg: boolean) => void;
+}
+
+export const LoginForm = ({ setIsLoggedIn }: Props) => {
   const [isError, setIsError] = useState(false);
   const {
     register,
@@ -25,6 +29,7 @@ export const LoginForm = () => {
 
     if (res.token) {
       setIsError(false);
+      setIsLoggedIn(true);
     } else {
       setIsError(true);
     }

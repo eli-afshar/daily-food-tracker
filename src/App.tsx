@@ -1,16 +1,17 @@
-import "./App.css";
+import { useState } from "react";
 import { LoginForm } from "./containers/loginPage/LoginForm";
 import { MainForm } from "./containers/mainPage/MainForm";
 
 function App() {
-  const isLoggedIn = false;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return isLoggedIn ? (
     <>
-      <LoginForm />
+      <MainForm />
     </>
   ) : (
     <>
-      <MainForm />
+      <LoginForm setIsLoggedIn={setIsLoggedIn} />
     </>
   );
 }
