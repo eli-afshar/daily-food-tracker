@@ -4,9 +4,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useForm } from "react-hook-form";
-import { userCheck } from "./UserCheck";
+import { userCheck } from "../axios/UserCheck";
 import { useState } from "react";
-import { Alert } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 
 export interface Inputs {
   username: string;
@@ -19,20 +19,28 @@ interface Props {
 
 export const LoginForm = ({ setIsLoggedIn }: Props) => {
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<Inputs>();
+
   const onSubmit = async (data: Inputs) => {
+    setIsLoading(true);
     const res = await userCheck(data);
 
     if (res.token) {
+      setIsLoading(false);
       setIsError(false);
       setIsLoggedIn(true);
     } else {
+      setIsLoading(false);
       setIsError(true);
     }
+    reset();
   };
 
   return (
@@ -81,14 +89,18 @@ export const LoginForm = ({ setIsLoggedIn }: Props) => {
             error={Boolean(errors.password)}
           />
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign In
-          </Button>
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+          )}
         </Box>
         {isError && <Alert severity="error">Something went wrong!</Alert>}
       </Box>
