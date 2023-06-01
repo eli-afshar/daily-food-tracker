@@ -27,6 +27,7 @@ export const MainForm = () => {
   const [options, setOptions] = useState<FoodDetails[]>([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [total, setTotal] = useState(0);
 
   const {
     register,
@@ -43,9 +44,20 @@ export const MainForm = () => {
     setOptions(res);
   };
 
+  const calcTotalCalories = async () => {
+    const res = await getDailyRecords();
+    let sum = 0;
+    res.forEach((obj: any) => {
+      if (obj.total) {
+        sum += obj.total;
+      }
+    });
+    setTotal(sum);
+  };
+
   useEffect(() => {
     getFoods();
-    getDailyRecords();
+    calcTotalCalories();
   }, []);
 
   const onSubmit = async (data: FoodDetailsForm) => {
@@ -72,6 +84,7 @@ export const MainForm = () => {
           alignItems: "center",
         }}
       >
+        <div>{total}</div>
         <Autocomplete
           disablePortal
           id="combo-box-demo"
@@ -98,7 +111,7 @@ export const MainForm = () => {
             required
             fullWidth
             id="food-name"
-            label="food name"
+            label="Food name"
             hiddenLabel
             autoComplete="food name"
             autoFocus
@@ -113,7 +126,7 @@ export const MainForm = () => {
             margin="normal"
             required
             fullWidth
-            label="calories per 100gr"
+            label="Calories per 100gr"
             id="cal-per-100gr"
             autoComplete="calories per 100gr"
             {...register("caloriesPer100g", { required: true })}
@@ -128,7 +141,7 @@ export const MainForm = () => {
             required
             fullWidth
             type="number"
-            label="amount"
+            label="Amount"
             id="amount"
             autoComplete="amount"
             {...register("amount", { required: true })}
