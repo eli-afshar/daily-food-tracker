@@ -3,11 +3,12 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Autocomplete from "@mui/material/Autocomplete";
-import { foodsApi } from "../axios/foodsApi";
+import { getFoodsList } from "../axios/getFoodsList";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert, CircularProgress } from "@mui/material";
-import { recordApi } from "../axios/recordApi";
+import { submitRecords } from "../axios/submitRecords";
+import { getDailyRecords } from "../axios/getDailyRecords";
 
 interface FoodDetails {
   id?: number;
@@ -38,18 +39,19 @@ export const MainForm = () => {
   } = useForm<FoodDetailsForm>();
 
   const getFoods = async () => {
-    const res = await foodsApi();
+    const res = await getFoodsList();
     setOptions(res);
   };
 
   useEffect(() => {
     getFoods();
+    getDailyRecords();
   }, []);
 
   const onSubmit = async (data: FoodDetailsForm) => {
     data.total = ((data.amount ?? 0) * (data.caloriesPer100g ?? 0)) / 100;
     setIsLoading(true);
-    const res: any = await recordApi(data);
+    const res: any = await submitRecords(data);
 
     if (res.status === 200) {
       setIsLoading(false);

@@ -1,6 +1,6 @@
 import axios from "./ApiAxios";
 
-export const foodsApi = async () => {
+export const getFoodsList = async () => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get("/foods", {
