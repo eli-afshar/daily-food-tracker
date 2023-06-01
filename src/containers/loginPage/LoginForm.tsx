@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useForm } from "react-hook-form";
-import { userCheck } from "../axios/UserCheck";
+import { userApi } from "../axios/usersApi";
 import { useState } from "react";
 import { Alert, CircularProgress } from "@mui/material";
 
@@ -30,7 +30,7 @@ export const LoginForm = ({ setIsLoggedIn }: Props) => {
 
   const onSubmit = async (data: Inputs) => {
     setIsLoading(true);
-    const res = await userCheck(data);
+    const res = await userApi(data);
 
     if (res.token) {
       setIsLoading(false);

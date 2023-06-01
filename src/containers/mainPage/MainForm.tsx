@@ -3,9 +3,63 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Autocomplete from "@mui/material/Autocomplete";
-// import { useState } from "react";
+import { foodsApi } from "../axios/foodsApi";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Alert, CircularProgress } from "@mui/material";
+import { recordApi } from "../axios/recordApi";
+
+interface FoodDetails {
+  id?: number;
+  name: string;
+  caloriesPer100g: number | null;
+}
+
+export interface FoodDetailsForm {
+  name: string;
+  caloriesPer100g: number | null;
+  amount: number | null;
+  total?: number;
+}
 
 export const MainForm = () => {
+  const [options, setOptions] = useState<FoodDetails[]>([]);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    //reset,
+    setValue,
+    formState: { errors },
+    //getValues,
+    watch,
+  } = useForm<FoodDetailsForm>();
+
+  const getFoods = async () => {
+    const res = await foodsApi();
+    setOptions(res);
+  };
+
+  useEffect(() => {
+    getFoods();
+  }, []);
+
+  const onSubmit = async (data: FoodDetailsForm) => {
+    data.total = ((data.amount ?? 0) * (data.caloriesPer100g ?? 0)) / 100;
+    setIsLoading(true);
+    const res: any = await recordApi(data);
+
+    if (res.status === 200) {
+      setIsLoading(false);
+      setIsError(false);
+    } else {
+      setIsLoading(false);
+      setIsError(true);
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -19,27 +73,53 @@ export const MainForm = () => {
         <Autocomplete
           disablePortal
           id="combo-box-demo"
-          options={["Rice", "Chicken", "Meat", "Cheese", "Peach", "Grape"]}
+          options={options}
           sx={{ width: 357 }}
           renderInput={(params) => <TextField {...params} label="Food" />}
+          getOptionLabel={(opt) => opt.name}
+          onChange={(e, v) => {
+            setValue("name", v?.name ? v.name : "");
+            setValue(
+              "caloriesPer100g",
+              v?.caloriesPer100g ? v.caloriesPer100g : null
+            );
+          }}
         />
-        <Box component="form" noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          noValidate
+          sx={{ mt: 1 }}
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <TextField
             margin="normal"
             required
             fullWidth
-            id="food name"
+            id="food-name"
             label="food name"
+            hiddenLabel
             autoComplete="food name"
             autoFocus
+            {...register("name", { required: true })}
+            helperText={errors.name && "Food name is require."}
+            error={Boolean(errors.name)}
+            InputLabelProps={{
+              shrink: Boolean(watch("name")),
+            }}
           />
           <TextField
             margin="normal"
             required
             fullWidth
-            label="cal per 100gr"
-            id="cal per 100gr"
-            autoComplete="cal per 100gr"
+            label="calories per 100gr"
+            id="cal-per-100gr"
+            autoComplete="calories per 100gr"
+            {...register("caloriesPer100g", { required: true })}
+            helperText={errors.caloriesPer100g && "Food calories is require."}
+            error={Boolean(errors.caloriesPer100g)}
+            InputLabelProps={{
+              shrink: Boolean(watch("caloriesPer100g")),
+            }}
           />
           <TextField
             margin="normal"
@@ -49,18 +129,31 @@ export const MainForm = () => {
             label="amount"
             id="amount"
             autoComplete="amount"
+            {...register("amount", { required: true })}
+            helperText={errors.caloriesPer100g && "Amount is require."}
+            error={Boolean(errors.amount)}
           />
-          <p>Total: amount * cal</p>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Submit
-          </Button>
+          <p>{`Total = ${
+            (Number(watch("amount") ?? 0) *
+              Number(watch("caloriesPer100g") ?? 0)) /
+            100
+          }`}</p>
+
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Submit
+            </Button>
+          )}
         </Box>
+        {isError && <Alert severity="error">Something went wrong!</Alert>}
       </Box>
     </Container>
   );
