@@ -9,6 +9,6 @@ export const getDailyRecords = async () => {
     });
     return response.data;
   } catch (error) {
-    return error;
+    return [];
   }
 };

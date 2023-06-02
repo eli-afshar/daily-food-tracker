@@ -32,7 +32,7 @@ export const MainForm = () => {
   const {
     register,
     handleSubmit,
-    //reset,
+    reset,
     setValue,
     formState: { errors },
     //getValues,
@@ -68,6 +68,8 @@ export const MainForm = () => {
     if (res.status === 200) {
       setIsLoading(false);
       setIsError(false);
+      reset();
+      calcTotalCalories();
     } else {
       setIsLoading(false);
       setIsError(true);
@@ -129,7 +131,9 @@ export const MainForm = () => {
             label="Calories per 100gr"
             id="cal-per-100gr"
             autoComplete="calories per 100gr"
-            {...register("caloriesPer100g", { required: true })}
+            {...register("caloriesPer100g", {
+              required: true,
+            })}
             helperText={errors.caloriesPer100g && "Food calories is require."}
             error={Boolean(errors.caloriesPer100g)}
             InputLabelProps={{
@@ -144,9 +148,9 @@ export const MainForm = () => {
             label="Amount"
             id="amount"
             autoComplete="amount"
-            {...register("amount", { required: true })}
             helperText={errors.caloriesPer100g && "Amount is require."}
             error={Boolean(errors.amount)}
+            {...register("amount", { required: true })}
           />
 
           <p>{`Total = ${
@@ -163,6 +167,7 @@ export const MainForm = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={isLoading || !watch("amount")}
             >
               Submit
             </Button>
