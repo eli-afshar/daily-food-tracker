@@ -28,6 +28,7 @@ export const MainForm = () => {
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [total, setTotal] = useState(0);
+  const [message, setMessage] = useState("");
 
   const {
     register,
@@ -60,6 +61,8 @@ export const MainForm = () => {
     calcTotalCalories();
   }, []);
 
+  console.log(process.env);
+
   const onSubmit = async (data: FoodDetailsForm) => {
     data.total = ((data.amount ?? 0) * (data.caloriesPer100g ?? 0)) / 100;
     setIsLoading(true);
@@ -70,14 +73,41 @@ export const MainForm = () => {
       setIsError(false);
       reset();
       calcTotalCalories();
+      setMessage("Record added successfully");
     } else {
       setIsLoading(false);
       setIsError(true);
     }
   };
 
+  const closeAlert = () => {
+    const timeout = setTimeout(() => {
+      setMessage("");
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  };
+
   return (
     <Container component="main" maxWidth="xs">
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 3,
+          top: 20,
+          width: "calc(100% - 64px)",
+        }}
+      >
+        {message && (
+          <Alert
+            severity="success"
+            onClose={closeAlert()}
+            style={{ width: "100%" }}
+          >
+            {message}
+          </Alert>
+        )}
+      </div>
       <Box
         sx={{
           marginTop: 8,
@@ -86,12 +116,19 @@ export const MainForm = () => {
           alignItems: "center",
         }}
       >
-        <div>{total}</div>
+        <TextField
+          id="total-daily-cal"
+          margin="normal"
+          size="small"
+          label={`Daily total calories =  ${total}`}
+          variant="outlined"
+        />
+
         <Autocomplete
           disablePortal
           id="combo-box-demo"
           options={options}
-          sx={{ width: 357 }}
+          fullWidth
           renderInput={(params) => <TextField {...params} label="Food" />}
           getOptionLabel={(opt) => opt.name}
           onChange={(e, v) => {
