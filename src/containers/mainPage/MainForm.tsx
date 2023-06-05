@@ -6,9 +6,21 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { getFoodsList } from "../axios/getFoodsList";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, CircularProgress } from "@mui/material";
+import {
+  Alert,
+  BottomNavigation,
+  BottomNavigationAction,
+  CircularProgress,
+  IconButton,
+  Paper,
+  Snackbar,
+} from "@mui/material";
 import { submitRecords } from "../axios/submitRecords";
 import { getDailyRecords } from "../axios/getDailyRecords";
+import LogoutIcon from "@mui/icons-material/Logout";
+import HomeIcon from "@mui/icons-material/Home";
+import LoginIcon from "@mui/icons-material/Login";
+import TableViewIcon from "@mui/icons-material/TableView";
 
 interface FoodDetails {
   id?: number;
@@ -29,6 +41,7 @@ export const MainForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [total, setTotal] = useState(0);
   const [message, setMessage] = useState("");
+  const [open, setOpen] = useState(false);
 
   const {
     register,
@@ -53,15 +66,14 @@ export const MainForm = () => {
         sum += obj.total;
       }
     });
-    setTotal(sum);
+    let totalCal = Number(sum.toFixed(2));
+    setTotal(totalCal);
   };
 
   useEffect(() => {
     getFoods();
     calcTotalCalories();
   }, []);
-
-  console.log(process.env);
 
   const onSubmit = async (data: FoodDetailsForm) => {
     data.total = ((data.amount ?? 0) * (data.caloriesPer100g ?? 0)) / 100;
@@ -73,6 +85,7 @@ export const MainForm = () => {
       setIsError(false);
       reset();
       calcTotalCalories();
+      setOpen(true);
       setMessage("Record added successfully");
     } else {
       setIsLoading(false);
@@ -80,53 +93,40 @@ export const MainForm = () => {
     }
   };
 
-  const closeAlert = () => {
-    const timeout = setTimeout(() => {
-      setMessage("");
-    }, 2000);
-
-    return () => clearTimeout(timeout);
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <div
-        style={{
-          position: "absolute",
-          zIndex: 3,
-          top: 20,
-          width: "calc(100% - 64px)",
-        }}
+    <Container component="div" maxWidth="xs">
+      <IconButton aria-label="logout" color="primary">
+        <LogoutIcon />
+      </IconButton>
+
+      <Snackbar
+        open={open}
+        anchorOrigin={{ horizontal: "center", vertical: "top" }}
+        onClose={handleClose}
+        autoHideDuration={3000}
       >
-        {message && (
-          <Alert
-            severity="success"
-            onClose={closeAlert()}
-            style={{ width: "100%" }}
-          >
-            {message}
-          </Alert>
-        )}
-      </div>
+        <Alert severity="success">{message}</Alert>
+      </Snackbar>
+
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 1,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
-        <TextField
-          id="total-daily-cal"
-          margin="normal"
-          size="small"
-          label={`Daily total calories =  ${total}`}
+        <Paper
           variant="outlined"
-        />
+          sx={{ p: 2, mb: 1 }}
+        >{`Daily total calories =  ${total}`}</Paper>
 
         <Autocomplete
           disablePortal
-          id="combo-box-demo"
           options={options}
           fullWidth
           renderInput={(params) => <TextField {...params} label="Food" />}
