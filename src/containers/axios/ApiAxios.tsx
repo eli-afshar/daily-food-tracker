@@ -12,7 +12,6 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("🚀 ~ file: ApiAxios.tsx:13 ~ error:", error);
     if (error.response.status === 403) {
       localStorage.removeItem("token");
       window.location.reload();

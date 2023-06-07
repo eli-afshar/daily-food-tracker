@@ -7,7 +7,7 @@ export const getDailyRecords = async () => {
     const response = await axios.get(`/records/${getCurrentDate()}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return response.data;
+    return response.data ?? [];
   } catch (error) {
     return [];
   }

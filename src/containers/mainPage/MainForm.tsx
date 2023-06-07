@@ -8,8 +8,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Alert,
-  BottomNavigation,
-  BottomNavigationAction,
   CircularProgress,
   IconButton,
   Paper,
@@ -18,9 +16,6 @@ import {
 import { submitRecords } from "../axios/submitRecords";
 import { getDailyRecords } from "../axios/getDailyRecords";
 import LogoutIcon from "@mui/icons-material/Logout";
-import HomeIcon from "@mui/icons-material/Home";
-import LoginIcon from "@mui/icons-material/Login";
-import TableViewIcon from "@mui/icons-material/TableView";
 
 interface FoodDetails {
   id?: number;
