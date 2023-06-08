@@ -1,4 +1,4 @@
-import { Container, Paper, Typography } from "@mui/material";
+import { Container, Box, Paper, Typography } from "@mui/material";
 import { getDailyRecords } from "../axios/getDailyRecords";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -31,24 +31,33 @@ export const RecordForm = () => {
         />
       </LocalizationProvider>
 
-      {records.map((record) => (
-        <Paper
-          variant="outlined"
-          sx={{
-            p: 2,
-            m: 4,
-            width: 257,
-            flexDirection: "column",
-            display: "flex",
-          }}
-        >
-          <Typography variant="body1">Food name = {record.name}</Typography>
+      <Box
+        sx={{
+          marginTop: 1,
+          display: "flex",
+          flexDirection: "column-reverse",
+          alignItems: "center",
+        }}
+      >
+        {records.map((record) => (
+          <Paper
+            variant="outlined"
+            sx={{
+              p: 2,
+              m: 1,
+              width: 257,
+              flexDirection: "column",
+              display: "flex",
+            }}
+          >
+            <Typography variant="body1">Food name = {record.name}</Typography>
 
-          <Typography variant="body1">Amount = {record.amount}</Typography>
+            <Typography variant="body1">Amount = {record.amount}</Typography>
 
-          <Typography variant="body1">Total Cal = {record.total}</Typography>
-        </Paper>
-      ))}
+            <Typography variant="body1">Total Cal = {record.total}</Typography>
+          </Paper>
+        ))}
+      </Box>
     </Container>
   );
 };

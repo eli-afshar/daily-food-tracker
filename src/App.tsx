@@ -34,7 +34,10 @@ function App() {
         <div>
           <div id="container" style={{ height: "100vh" }}>
             {activePage === ActivePage.Record ? (
-              <div id="contentR" style={{ height: `calc(100vh - 80px)` }}>
+              <div
+                id="contentR"
+                style={{ height: `calc(100vh - 60px)`, overflow: "scroll" }}
+              >
                 <RecordForm />
               </div>
             ) : (
