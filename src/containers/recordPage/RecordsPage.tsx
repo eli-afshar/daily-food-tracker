@@ -5,12 +5,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import { FoodDetailsForm } from "../mainPage/MainForm";
+import dayjs from "dayjs";
 
-export const RecordForm = () => {
+export const RecordsPage = () => {
   const [records, setRecords] = useState<FoodDetailsForm[]>([]);
 
-  const getRecords = async () => {
-    const res = await getDailyRecords();
+  const getRecords = async (date?: Date) => {
+    const res = await getDailyRecords(date);
     setRecords(res);
   };
 
@@ -28,6 +29,11 @@ export const RecordForm = () => {
             textAlign: "center",
             display: "flex",
           }}
+          defaultValue={dayjs(new Date())}
+          format="DD MMM YYYY"
+          onChange={(e) => {
+            getRecords(e?.toDate());
+          }}
         />
       </LocalizationProvider>
 
@@ -43,8 +49,8 @@ export const RecordForm = () => {
           <Paper
             variant="outlined"
             sx={{
-              p: 2,
-              m: 1,
+              p: 1,
+              m: 0.5,
               width: 257,
               flexDirection: "column",
               display: "flex",

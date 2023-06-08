@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { LoginForm } from "./containers/loginPage/LoginForm";
 import { MainForm } from "./containers/mainPage/MainForm";
 import { NavigationPanel } from "./components/NavigationPanel";
-import { RecordForm } from "./containers/recordPage/RecordForm";
+import { RecordsPage } from "./containers/recordPage/RecordsPage";
 
 enum ActivePage {
   Main,
@@ -38,7 +38,7 @@ function App() {
                 id="contentR"
                 style={{ height: `calc(100vh - 60px)`, overflow: "scroll" }}
               >
-                <RecordForm />
+                <RecordsPage />
               </div>
             ) : (
               <div id="contentM" style={{ height: `calc(100vh - 60px)` }}>
