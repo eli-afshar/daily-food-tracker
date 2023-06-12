@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Autocomplete from "@mui/material/Autocomplete";
-import { getFoodsList } from "../axios/getFoodsList";
+import { FoodDetails, getFoodsList } from "../axios/getFoodsList";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert, CircularProgress, IconButton, Snackbar } from "@mui/material";
@@ -11,13 +11,6 @@ import { submitRecords } from "../axios/submitRecords";
 import { GetRecordResponse, getDailyRecords } from "../axios/getDailyRecords";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { TotalDailyCalories } from "../../components/TotalDailyCalories";
-
-interface FoodDetails {
-  id?: number;
-  name: string;
-  caloriesPer100g: number | null;
-  defaultWeight: number | null;
-}
 
 export interface FoodDetailsForm {
   name: string;
@@ -48,7 +41,9 @@ export const MainForm = () => {
 
   const getFoods = async () => {
     const res = await getFoodsList();
-    setOptions(res);
+    if (res) {
+      setOptions(res);
+    }
   };
 
   const getDailyRecordsApi = async () => {

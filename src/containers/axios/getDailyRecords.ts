@@ -1,5 +1,5 @@
 import { getCurrentDate } from "../../utils/dateFormat";
-import { FoodDetailsForm } from "../mainPage/MainForm";
+import { FoodDetailsForm } from "../pages/MainForm";
 import axios from "./ApiAxios";
 
 export interface GetRecordResponse{

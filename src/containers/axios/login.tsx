@@ -1,5 +1,5 @@
 import axios from "./ApiAxios";
-import { Inputs } from "../loginPage/LoginForm";
+import { Inputs } from "../pages/LoginForm";
 
 export const login = async (arg: Inputs) => {
   try {

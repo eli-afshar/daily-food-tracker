@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { LoginForm } from "./containers/loginPage/LoginForm";
-import { MainForm } from "./containers/mainPage/MainForm";
+import { LoginForm } from "./containers/pages/LoginForm";
+import { MainForm } from "./containers/pages/MainForm";
 import { NavigationPanel } from "./components/NavigationPanel";
-import { RecordsPage } from "./containers/recordPage/RecordsPage";
+import { RecordsPage } from "./containers/pages/RecordsPage";
+import { FoodsPage } from "./containers/pages/FoodsPage";
 
 enum ActivePage {
   Main,
-  Record,
+  Records,
+  Foods,
 }
 
 function App() {
@@ -14,11 +16,15 @@ function App() {
   const [activePage, setActivePage] = useState(ActivePage.Main);
 
   const handleGoToRecords = () => {
-    setActivePage(ActivePage.Record);
+    setActivePage(ActivePage.Records);
   };
 
   const handleGoToMain = () => {
     setActivePage(ActivePage.Main);
+  };
+
+  const handleGoToFoods = () => {
+    setActivePage(ActivePage.Foods);
   };
 
   useEffect(() => {
@@ -33,22 +39,33 @@ function App() {
       {isLoggedIn ? (
         <div>
           <div id="container" style={{ height: "100vh" }}>
-            {activePage === ActivePage.Record ? (
+            {activePage === ActivePage.Records && (
               <div
                 id="contentR"
-                style={{ height: `calc(100vh - 60px)`, overflow: "scroll" }}
+                style={{ height: `calc(100vh - 80px)`, overflow: "scroll" }}
               >
                 <RecordsPage />
               </div>
-            ) : (
-              <div id="contentM" style={{ height: `calc(100vh - 60px)` }}>
+            )}
+            {activePage === ActivePage.Foods && (
+              <div
+                id="contentR"
+                style={{ height: `calc(100vh - 80px)`, overflow: "scroll" }}
+              >
+                <FoodsPage />
+              </div>
+            )}
+            {activePage === ActivePage.Main && (
+              <div id="contentM" style={{ height: `calc(100vh - 80px)` }}>
                 <MainForm />
               </div>
             )}
+
             <div>
               <NavigationPanel
                 handleGoToRecords={handleGoToRecords}
                 handleGoToMain={handleGoToMain}
+                handleGoToFoods={handleGoToFoods}
               />
             </div>
           </div>

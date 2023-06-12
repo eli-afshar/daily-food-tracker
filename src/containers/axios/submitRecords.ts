@@ -1,5 +1,5 @@
 import axios from "./ApiAxios";
-import { FoodDetailsForm } from "../mainPage/MainForm";
+import { FoodDetailsForm } from "../pages/MainForm";
 import { getCurrentDate } from "../../utils/dateFormat";
 
 export const submitRecords = async (arg: FoodDetailsForm) => {
