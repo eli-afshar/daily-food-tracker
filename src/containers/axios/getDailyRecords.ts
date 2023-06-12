@@ -15,8 +15,8 @@ export const getDailyRecords = async (date?:Date) => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    return response.data ?? {records:[]};
+    return response.data ?? {records:[] , dailyGoal: 0};
   } catch (error) {
-    return null;
+    return {records:[] , dailyGoal: 0};
   }
 };

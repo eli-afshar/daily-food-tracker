@@ -56,7 +56,6 @@ export const MainForm = () => {
     if (res) {
       setDailyRecordsCal(res);
     }
-    console.log(res);
   };
 
   useEffect(() => {
