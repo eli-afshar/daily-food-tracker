@@ -3,7 +3,10 @@ import { Inputs } from "../loginPage/LoginForm";
 
 export const login = async (arg: Inputs) => {
   try {
-    const response = await axios.post("/login", arg);
+    const response = await axios.post("/login", {
+      username: arg.username.toLowerCase(),
+      password: arg.password,
+    });
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
     }

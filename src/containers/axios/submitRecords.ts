@@ -10,6 +10,6 @@ export const submitRecords = async (arg: FoodDetailsForm) => {
     });
     return response;
   } catch (error) {
-    return error;
+    return null;
   }
 };

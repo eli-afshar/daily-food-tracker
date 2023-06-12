@@ -6,7 +6,6 @@ export const getFoodsList = async () => {
     const response = await axios.get("/foods", {
       headers: { Authorization: `Bearer ${token}` },
     });
-
     return response.data;
   } catch (error: any) {
     if (error.response.status === 403) {

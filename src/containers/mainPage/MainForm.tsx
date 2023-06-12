@@ -6,21 +6,17 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { getFoodsList } from "../axios/getFoodsList";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Alert,
-  CircularProgress,
-  IconButton,
-  Paper,
-  Snackbar,
-} from "@mui/material";
+import { Alert, CircularProgress, IconButton, Snackbar } from "@mui/material";
 import { submitRecords } from "../axios/submitRecords";
-import { getDailyRecords } from "../axios/getDailyRecords";
+import { GetRecordResponse, getDailyRecords } from "../axios/getDailyRecords";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { TotalDailyCalories } from "../../components/TotalDailyCalories";
 
 interface FoodDetails {
   id?: number;
   name: string;
   caloriesPer100g: number | null;
+  defaultWeight: number | null;
 }
 
 export interface FoodDetailsForm {
@@ -34,9 +30,11 @@ export const MainForm = () => {
   const [options, setOptions] = useState<FoodDetails[]>([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [total, setTotal] = useState(0);
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
+  const [dailyRecordsCal, setDailyRecordsCal] = useState<GetRecordResponse>({
+    records: [],
+  });
 
   const {
     register,
@@ -53,33 +51,29 @@ export const MainForm = () => {
     setOptions(res);
   };
 
-  const calcTotalCalories = async () => {
+  const getDailyRecordsApi = async () => {
     const res = await getDailyRecords();
-    let sum = 0;
-    res.forEach((obj: any) => {
-      if (obj.total) {
-        sum += obj.total;
-      }
-    });
-    let totalCal = Number(sum.toFixed(2));
-    setTotal(totalCal);
+    if (res) {
+      setDailyRecordsCal(res);
+    }
+    console.log(res);
   };
 
   useEffect(() => {
     getFoods();
-    calcTotalCalories();
+    getDailyRecordsApi();
   }, []);
 
   const onSubmit = async (data: FoodDetailsForm) => {
     data.total = ((data.amount ?? 0) * (data.caloriesPer100g ?? 0)) / 100;
     setIsLoading(true);
-    const res: any = await submitRecords(data);
+    const res = await submitRecords(data);
 
-    if (res.status === 200) {
+    if (res && res.status === 200) {
       setIsLoading(false);
       setIsError(false);
       reset();
-      calcTotalCalories();
+      getDailyRecordsApi();
       setOpen(true);
       setMessage("Record added successfully");
     } else {
@@ -115,10 +109,7 @@ export const MainForm = () => {
           alignItems: "center",
         }}
       >
-        <Paper
-          variant="outlined"
-          sx={{ p: 2, mb: 1 }}
-        >{`Daily total calories =  ${total}`}</Paper>
+        <TotalDailyCalories dailyRecordsCal={dailyRecordsCal} />
 
         <Autocomplete
           disablePortal
@@ -132,6 +123,7 @@ export const MainForm = () => {
               "caloriesPer100g",
               v?.caloriesPer100g ? v.caloriesPer100g : null
             );
+            setValue("amount", v?.defaultWeight ? v.defaultWeight : null);
           }}
         />
         <Box
@@ -183,14 +175,37 @@ export const MainForm = () => {
             helperText={errors.caloriesPer100g && "Amount is require."}
             error={Boolean(errors.amount)}
             {...register("amount", { required: true })}
+            InputLabelProps={{
+              shrink: Boolean(watch("amount")),
+            }}
           />
+          <p>
+            {`Total = ${
+              (Number(watch("amount") ?? 0) *
+                Number(watch("caloriesPer100g") ?? 0)) /
+              100
+            }`}
+          </p>
 
-          <p>{`Total = ${
-            (Number(watch("amount") ?? 0) *
-              Number(watch("caloriesPer100g") ?? 0)) /
-            100
-          }`}</p>
-
+          {/* <TextField
+            margin="normal"
+            required
+            fullWidth
+            type="number"
+            label="Total cal"
+            id="total-cal"
+            {...register("total", {
+              required: true,
+            })}
+            helperText={errors.caloriesPer100g && "Total calories is require."}
+            error={Boolean(errors.total)}
+          >
+            {`Total = ${
+              (Number(watch("amount") ?? 0) *
+                Number(watch("caloriesPer100g") ?? 0)) /
+              100
+            }`}
+          </TextField> */}
           {isLoading ? (
             <CircularProgress />
           ) : (
