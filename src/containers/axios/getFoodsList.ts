@@ -15,7 +15,6 @@ export const getFoodsList = async () => {
     const response = await axios.get<FoodDetails[]>("/foods", {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log(response)
     return response.data ?? [];
   } catch (error: any) {
     if (error.response.status === 403) {
