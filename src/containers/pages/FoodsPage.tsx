@@ -1,6 +1,7 @@
-import { Container, Box, Paper, Typography } from "@mui/material";
+import { Container, Box, Paper, Typography, Fab } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FoodDetails, getFoodsList } from "../axios/getFoodsList";
+import AddIcon from "@mui/icons-material/Add";
 
 export const FoodsPage = () => {
   const [foodList, setFoodList] = useState<FoodDetails[]>([]);
@@ -17,15 +18,7 @@ export const FoodsPage = () => {
   }, []);
 
   return (
-    <Container
-      component="div"
-      maxWidth="xs"
-      sx={{
-        alignItems: "center",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <Container component="div" maxWidth="xs">
       <Box
         sx={{
           marginTop: 1,
@@ -56,6 +49,11 @@ export const FoodsPage = () => {
             </Typography>
           </Paper>
         ))}
+      </Box>
+      <Box style={{ overflow: "scroll" }}>
+        <Fab size="small" color="primary" aria-label="add">
+          <AddIcon />
+        </Fab>
       </Box>
     </Container>
   );

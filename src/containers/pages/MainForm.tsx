@@ -6,11 +6,11 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { FoodDetails, getFoodsList } from "../axios/getFoodsList";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, CircularProgress, IconButton, Snackbar } from "@mui/material";
+import { Alert, CircularProgress, Snackbar } from "@mui/material";
 import { submitRecords } from "../axios/submitRecords";
 import { GetRecordResponse, getDailyRecords } from "../axios/getDailyRecords";
-import LogoutIcon from "@mui/icons-material/Logout";
 import { TotalDailyCalories } from "../../components/TotalDailyCalories";
+import { LogoutButton } from "../../components/LogoutButton";
 
 export interface FoodDetailsForm {
   name: string;
@@ -82,9 +82,7 @@ export const MainForm = () => {
 
   return (
     <Container component="div" maxWidth="xs">
-      <IconButton aria-label="logout" color="primary">
-        <LogoutIcon />
-      </IconButton>
+      <LogoutButton />
 
       <Snackbar
         open={open}
