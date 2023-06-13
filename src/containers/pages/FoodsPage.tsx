@@ -50,7 +50,16 @@ export const FoodsPage = () => {
           </Paper>
         ))}
       </Box>
-      <Box style={{ overflow: "scroll" }}>
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          position: "absolute",
+          bottom: "100px",
+          right: "30px",
+          zIndex: 999,
+        }}
+      >
         <Fab size="small" color="primary" aria-label="add">
           <AddIcon />
         </Fab>
