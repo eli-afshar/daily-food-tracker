@@ -13,9 +13,5 @@ export const getFoodsList = async () => {
   try {
     const response = await axios.get<FoodDetails[]>("/foods");
     return response.data ?? [];
-  } catch (error: any) {
-    if (error.response.status === 403) {
-      localStorage.removeItem("token");
-    }
-  }
+  } catch (error: any) {}
 };

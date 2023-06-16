@@ -12,9 +12,7 @@ export const addFood = async (arg: FoodDetails) => {
     });
     return null
   } catch (error: any) {
-    if (error.response.status === 403) {
-      localStorage.removeItem("token");
-    }
+ 
     return error
   }
 };

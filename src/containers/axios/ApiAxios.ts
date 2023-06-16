@@ -1,13 +1,21 @@
 import axios from "axios";
 
-const token = localStorage.getItem("token");
 
 const instance = axios.create({
   baseURL:
     process.env.NODE_ENV === "development"
       ? process.env.REACT_APP_BASE_URL
-      : `${window.location.origin}/api`,
-      headers:{Authorization:`Bearer ${token}` }
+      : `${window.location.origin}/api`
+});
+
+const getToken = () => localStorage.getItem("token");
+
+export default instance;
+instance.interceptors.request.use((req) => { 
+  if (req.url !== "/login") { 
+      req.headers.Authorization = `Bearer ${getToken()}`; 
+  } 
+  return req; 
 });
 
 instance.interceptors.response.use(
@@ -24,4 +32,3 @@ instance.interceptors.response.use(
   }
 );
 
-export default instance;
