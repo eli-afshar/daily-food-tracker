@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { LoginForm } from "./containers/pages/LoginForm";
 import { MainForm } from "./containers/pages/MainForm";
 import { NavigationPanel } from "./components/NavigationPanel";
 import { RecordsPage } from "./containers/pages/RecordsPage";
 import { FoodsPage } from "./containers/pages/FoodsPage";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { Box } from "@mui/material";
 
 enum ActivePage {
   Main,
@@ -34,10 +36,25 @@ function App() {
     }
   }, []);
 
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: "dark",
+        },
+      }),
+    []
+  );
+
   return (
-    <>
-      {isLoggedIn ? (
-        <div>
+    <ThemeProvider theme={theme}>
+      <Box
+        sx={(theme) => ({
+          backgroundColor: theme.palette.background.paper,
+          height: "100vh",
+        })}
+      >
+        {isLoggedIn ? (
           <div id="container" style={{ height: "100vh" }}>
             {activePage === ActivePage.Records && (
               <div
@@ -69,13 +86,11 @@ function App() {
               />
             </div>
           </div>
-        </div>
-      ) : (
-        <>
+        ) : (
           <LoginForm setIsLoggedIn={setIsLoggedIn} />
-        </>
-      )}
-    </>
+        )}
+      </Box>
+    </ThemeProvider>
   );
 }
 

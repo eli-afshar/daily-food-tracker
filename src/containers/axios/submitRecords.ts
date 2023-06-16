@@ -1,13 +1,10 @@
 import axios from "./ApiAxios";
-import { FoodDetailsForm } from "../pages/MainForm";
+import { FoodDetailsRecord } from "../pages/MainForm";
 import { getCurrentDate } from "../../utils/dateFormat";
 
-export const submitRecords = async (arg: FoodDetailsForm) => {
-  const token = localStorage.getItem("token");
+export const submitRecords = async (arg: FoodDetailsRecord) => {
   try {
-    const response = await axios.post(`/records/${getCurrentDate()}`, arg, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.post(`/records/${getCurrentDate()}`, arg);
     return response;
   } catch (error) {
     return null;

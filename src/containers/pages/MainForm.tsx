@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Autocomplete from "@mui/material/Autocomplete";
+import { Typography } from "@mui/material";
 import { FoodDetails, getFoodsList } from "../axios/getFoodsList";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -12,7 +13,7 @@ import { GetRecordResponse, getDailyRecords } from "../axios/getDailyRecords";
 import { TotalDailyCalories } from "../../components/TotalDailyCalories";
 import { LogoutButton } from "../../components/LogoutButton";
 
-export interface FoodDetailsForm {
+export interface FoodDetailsRecord {
   name: string;
   caloriesPer100g: number | null;
   amount: number | null;
@@ -37,7 +38,7 @@ export const MainForm = () => {
     formState: { errors },
     //getValues,
     watch,
-  } = useForm<FoodDetailsForm>();
+  } = useForm<FoodDetailsRecord>();
 
   const getFoods = async () => {
     const res = await getFoodsList();
@@ -58,7 +59,7 @@ export const MainForm = () => {
     getDailyRecordsApi();
   }, []);
 
-  const onSubmit = async (data: FoodDetailsForm) => {
+  const onSubmit = async (data: FoodDetailsRecord) => {
     data.total = ((data.amount ?? 0) * (data.caloriesPer100g ?? 0)) / 100;
     setIsLoading(true);
     const res = await submitRecords(data);
@@ -132,7 +133,6 @@ export const MainForm = () => {
             label="Food name"
             hiddenLabel
             autoComplete="food name"
-            autoFocus
             {...register("name", { required: true })}
             helperText={errors.name && "Food name is require."}
             error={Boolean(errors.name)}
@@ -171,13 +171,13 @@ export const MainForm = () => {
               shrink: Boolean(watch("amount")),
             }}
           />
-          <p>
+          <Typography color="text.primary">
             {`Total = ${
               (Number(watch("amount") ?? 0) *
                 Number(watch("caloriesPer100g") ?? 0)) /
               100
             }`}
-          </p>
+          </Typography>
 
           {/* <TextField
             margin="normal"

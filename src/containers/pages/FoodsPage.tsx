@@ -1,7 +1,7 @@
-import { Container, Box, Paper, Typography, Fab } from "@mui/material";
+import { Container, Box, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FoodDetails, getFoodsList } from "../axios/getFoodsList";
-import AddIcon from "@mui/icons-material/Add";
+import { AddFoodForm } from "../../components/AddFoodForm";
 
 export const FoodsPage = () => {
   const [foodList, setFoodList] = useState<FoodDetails[]>([]);
@@ -50,20 +50,7 @@ export const FoodsPage = () => {
           </Paper>
         ))}
       </Box>
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          position: "absolute",
-          bottom: "100px",
-          right: "30px",
-          zIndex: 999,
-        }}
-      >
-        <Fab size="small" color="primary" aria-label="add">
-          <AddIcon />
-        </Fab>
-      </Box>
+      <AddFoodForm resetList={getFoods} />
     </Container>
   );
 };

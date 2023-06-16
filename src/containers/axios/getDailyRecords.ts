@@ -1,19 +1,16 @@
 import { getCurrentDate } from "../../utils/dateFormat";
-import { FoodDetailsForm } from "../pages/MainForm";
+import { FoodDetailsRecord } from "../pages/MainForm";
 import axios from "./ApiAxios";
 
 export interface GetRecordResponse{
-  records:FoodDetailsForm[],
+  records:FoodDetailsRecord[],
   dailyGoal?:number
 }
 
 
 export const getDailyRecords = async (date?:Date) => {
-  const token = localStorage.getItem("token");
   try {
-    const response = await axios.get<GetRecordResponse>(`/records/${getCurrentDate(date)}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get<GetRecordResponse>(`/records/${getCurrentDate(date)}`);
 
     return response.data ?? {records:[] , dailyGoal: 0};
   } catch (error) {

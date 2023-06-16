@@ -10,11 +10,8 @@ export interface FoodDetails {
 
 
 export const getFoodsList = async () => {
-  const token = localStorage.getItem("token");
   try {
-    const response = await axios.get<FoodDetails[]>("/foods", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get<FoodDetails[]>("/foods");
     return response.data ?? [];
   } catch (error: any) {
     if (error.response.status === 403) {
