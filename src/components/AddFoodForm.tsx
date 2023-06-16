@@ -29,11 +29,7 @@ export const AddFoodForm = ({ resetList }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleClickOpen = () => {
-    setOpenDialog(true);
-  };
-
-  const handleClose = () => {
+  const handleCloseDialog = () => {
     setOpenDialog(false);
     reset();
   };
@@ -57,7 +53,7 @@ export const AddFoodForm = ({ resetList }: Props) => {
       setIsError(false);
       setMessage("Food added successfully");
       setOpenSnackbar(true);
-      handleClose();
+      handleCloseDialog();
       resetList();
     }
   };
@@ -78,7 +74,9 @@ export const AddFoodForm = ({ resetList }: Props) => {
           size="small"
           color="primary"
           aria-label="add"
-          onClick={handleClickOpen}
+          onClick={() => {
+            setOpenDialog(true);
+          }}
         >
           <AddIcon />
         </Fab>
@@ -95,7 +93,7 @@ export const AddFoodForm = ({ resetList }: Props) => {
         <Alert severity="success">{message}</Alert>
       </Snackbar>
 
-      <Dialog open={openDialog} onClose={handleClose}>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Add Food</DialogTitle>
         <Box
           component="form"
@@ -150,7 +148,7 @@ export const AddFoodForm = ({ resetList }: Props) => {
           </DialogContent>
 
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleCloseDialog}>Cancel</Button>
             {isLoading ? (
               <CircularProgress />
             ) : (

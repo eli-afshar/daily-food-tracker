@@ -2,6 +2,7 @@ import { Container, Box, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FoodDetails, getFoodsList } from "../axios/getFoodsList";
 import { AddFoodForm } from "../../components/AddFoodForm";
+import { DeleteButton } from "../../components/DeleteButton";
 
 export const FoodsPage = () => {
   const [foodList, setFoodList] = useState<FoodDetails[]>([]);
@@ -38,7 +39,16 @@ export const FoodsPage = () => {
               display: "flex",
             }}
           >
-            <Typography variant="body1">Food name = {item.name}</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                height: 25,
+              }}
+            >
+              <Typography variant="body1">Food name = {item.name}</Typography>
+              {item.id && <DeleteButton id={item.id} resetList={getFoods} />}
+            </Box>
 
             <Typography variant="body1">
               Calories in 100gr = {item.caloriesPer100g}
