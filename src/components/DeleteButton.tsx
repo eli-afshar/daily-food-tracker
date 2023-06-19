@@ -3,13 +3,15 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import { useState } from "react";
 import { deleteFood } from "../containers/axios/deleteFood";
+import { deleteRecord } from "../containers/axios/deleteRecord";
 
 interface Props {
   resetList: () => void;
   id: number;
+  type: "food" | "record";
 }
 
-export const DeleteButton = ({ resetList, id }: Props) => {
+export const DeleteButton = ({ resetList, id, type }: Props) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -20,7 +22,12 @@ export const DeleteButton = ({ resetList, id }: Props) => {
   };
 
   const handleDelete = async (fId: number) => {
-    const error = await deleteFood(fId);
+    const error =
+      type === "food"
+        ? await deleteFood(fId)
+        : type === "record"
+        ? await deleteRecord(fId)
+        : null;
 
     if (error) {
       setIsError(true);

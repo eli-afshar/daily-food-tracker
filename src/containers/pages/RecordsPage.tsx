@@ -6,6 +6,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { TotalDailyCalories } from "../../components/TotalDailyCalories";
+import { DeleteButton } from "../../components/DeleteButton";
 
 export const RecordsPage = () => {
   const [records, setRecords] = useState<GetRecordResponse>({ records: [] });
@@ -68,7 +69,22 @@ export const RecordsPage = () => {
               display: "flex",
             }}
           >
-            <Typography variant="body1">Food name = {record.name}</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                height: 25,
+              }}
+            >
+              <Typography variant="body1">Food name = {record.name}</Typography>
+              {record.id && (
+                <DeleteButton
+                  id={record.id}
+                  resetList={getRecords}
+                  type="record"
+                />
+              )}
+            </Box>
 
             <Typography variant="body1">Amount = {record.amount}</Typography>
 

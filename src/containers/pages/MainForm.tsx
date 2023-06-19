@@ -18,6 +18,7 @@ export interface FoodDetailsRecord {
   caloriesPer100g: number | null;
   amount: number | null;
   total?: number;
+  id?: number;
 }
 
 export const MainForm = () => {

@@ -47,7 +47,9 @@ export const FoodsPage = () => {
               }}
             >
               <Typography variant="body1">Food name = {item.name}</Typography>
-              {item.id && <DeleteButton id={item.id} resetList={getFoods} />}
+              {item.id && (
+                <DeleteButton id={item.id} resetList={getFoods} type="food" />
+              )}
             </Box>
 
             <Typography variant="body1">
