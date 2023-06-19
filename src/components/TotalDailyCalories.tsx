@@ -52,6 +52,7 @@ export function TotalDailyCalories({
           backgroundColor: "transparent",
           position: "relative",
           overflow: "hidden",
+          zIndex: 1,
         }}
       >
         <div
